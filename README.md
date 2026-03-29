@@ -1,6 +1,6 @@
 # 🛡️ CyberGuard v2.0
 
-> **Created by [Victoria TecHub](https://github.com/YOUR_USERNAME)**
+> **Created by [Victoria TecHub](https://github.com/SpineSoloh)**
 
 **CyberGuard v2.0** — Forensic Triage Assistant. Human-in-the-loop, privacy-aware, threat-intel enabled.
 
@@ -13,17 +13,17 @@ CyberGuard v2.0 helps you spot red flags on a machine that may be compromised. I
 
 ### Linux / macOS
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/cyberguard/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/SpineSoloh/CyberGuard-V2.0/main/scripts/install.sh | bash
 ```
 
 ### Windows (PowerShell — run as Administrator for best results)
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force
-irm https://raw.githubusercontent.com/YOUR_USERNAME/cyberguard/main/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/SpineSoloh/CyberGuard-V2.0/main/scripts/install.ps1 | iex
 ```
 
 ### Download pre-built binary
-Go to the [CyberGuard Releases page](https://github.com/YOUR_USERNAME/cyberguard/releases/latest)
+Go to the [CyberGuard Releases page](https://github.com/SpineSoloh/CyberGuard-V2.0/releases/latest)
 and download the binary for your OS. No Python, no pip, no dependencies.
 
 | Platform       | File                              |
@@ -47,7 +47,7 @@ sudo ./cyberguard-linux-x86_64 --require-admin --teaching
 pip install cyberguard
 
 # Latest from GitHub
-pip install git+https://github.com/YOUR_USERNAME/cyberguard.git
+pip install git+https://github.com/SpineSoloh/CyberGuard-V2.0.git
 ```
 
 ---

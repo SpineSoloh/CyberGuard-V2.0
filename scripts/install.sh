@@ -3,7 +3,7 @@
 # CyberGuard v2.0 — One-line installer for Linux & macOS
 #
 # Usage (copy-paste into your terminal):
-#   curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/cyberguard/main/scripts/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/SpineSoloh/CyberGuard-V2.0/main/scripts/install.sh | bash
 #
 # What it does:
 #   1. Checks for Python 3.9+   — offers to install via OS package manager if missing
@@ -14,7 +14,7 @@
 # ─────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
-REPO="https://github.com/YOUR_USERNAME/cyberguard"
+REPO="https://github.com/SpineSoloh/CyberGuard-V2.0"
 INSTALL_DIR="${HOME}/.cyberguard"
 VENV_DIR="${INSTALL_DIR}/venv"
 MIN_PY_MAJOR=3

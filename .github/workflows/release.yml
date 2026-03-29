@@ -97,13 +97,13 @@ jobs:
 
             **Linux / macOS — one-liner:**
             ```bash
-            curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/cyberguard/${{ github.ref_name }}/scripts/install.sh | bash
+            curl -fsSL https://raw.githubusercontent.com/SpineSoloh/CyberGuard-V2.0/${{ github.ref_name }}/scripts/install.sh | bash
             ```
 
             **Windows — PowerShell one-liner:**
             ```powershell
             Set-ExecutionPolicy Bypass -Scope Process -Force
-            irm https://raw.githubusercontent.com/YOUR_USERNAME/cyberguard/${{ github.ref_name }}/scripts/install.ps1 | iex
+            irm https://raw.githubusercontent.com/SpineSoloh/CyberGuard-V2.0/${{ github.ref_name }}/scripts/install.ps1 | iex
             ```
 
             **Or download the pre-built binary directly:**

@@ -4,7 +4,7 @@
 # Run this in PowerShell (as Administrator for best results):
 #
 #   Set-ExecutionPolicy Bypass -Scope Process -Force
-#   irm https://raw.githubusercontent.com/YOUR_USERNAME/cyberguard/main/scripts/install.ps1 | iex
+#   irm https://raw.githubusercontent.com/SpineSoloh/CyberGuard-V2.0/main/scripts/install.ps1 | iex
 #
 # What it does:
 #   1. Checks for Python 3.9+  — opens python.org if missing
@@ -16,7 +16,7 @@
 # ─────────────────────────────────────────────────────────────────────────────
 $ErrorActionPreference = "Stop"
 
-$Repo       = "https://github.com/YOUR_USERNAME/cyberguard"
+$Repo       = "https://github.com/SpineSoloh/CyberGuard-V2.0"
 $InstallDir = Join-Path $env:USERPROFILE ".cyberguard"
 $VenvDir    = Join-Path $InstallDir "venv"
 $BinDir     = Join-Path $InstallDir "bin"
