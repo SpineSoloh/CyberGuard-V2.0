@@ -1,0 +1,150 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - "v*"          # triggers on v2.0.0, v2.1.0, etc.
+  workflow_dispatch:   # allow manual trigger from GitHub UI
+
+permissions:
+  contents: write     # needed to create GitHub Releases
+
+jobs:
+  # ── Build standalone binaries (one per OS) ──────────────────────────────────
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact: cyberguard-linux-x86_64
+            binary:   cyberguard
+          - os: windows-latest
+            artifact: cyberguard-windows-x86_64.exe
+            binary:   cyberguard.exe
+          - os: macos-latest
+            artifact: cyberguard-macos-x86_64
+            binary:   cyberguard
+
+    runs-on: ${{ matrix.os }}
+    name: Build (${{ matrix.os }})
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install psutil pyinstaller
+          pip install -e .
+
+      - name: Build binary with PyInstaller
+        run: >
+          pyinstaller
+          --onefile
+          --name ${{ matrix.artifact }}
+          --hidden-import psutil
+          cyberguard/__main__.py
+
+      - name: Upload binary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist/${{ matrix.artifact }}
+
+  # ── Create GitHub Release with all binaries ─────────────────────────────────
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Create Release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/
+
+      - name: Generate checksums
+        run: |
+          cd dist
+          find . -type f | sort | xargs sha256sum > checksums.sha256
+          cat checksums.sha256
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name:  "CyberGuard ${{ github.ref_name }} by Victoria TecHub"
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            dist/**/cyberguard-linux-x86_64
+            dist/**/cyberguard-windows-x86_64.exe
+            dist/**/cyberguard-macos-x86_64
+            dist/checksums.sha256
+          body: |
+            ## CyberGuard ${{ github.ref_name }}
+
+            ### Install (no Python needed)
+
+            **Linux / macOS — one-liner:**
+            ```bash
+            curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/cyberguard/${{ github.ref_name }}/scripts/install.sh | bash
+            ```
+
+            **Windows — PowerShell one-liner:**
+            ```powershell
+            Set-ExecutionPolicy Bypass -Scope Process -Force
+            irm https://raw.githubusercontent.com/YOUR_USERNAME/cyberguard/${{ github.ref_name }}/scripts/install.ps1 | iex
+            ```
+
+            **Or download the pre-built binary directly:**
+            | Platform       | Binary                            |
+            |----------------|-----------------------------------|
+            | Linux x86_64   | `cyberguard-linux-x86_64`         |
+            | Windows x86_64 | `cyberguard-windows-x86_64.exe`   |
+            | macOS x86_64   | `cyberguard-macos-x86_64`         |
+
+            Verify checksums with `checksums.sha256`.
+
+            ### Quick start
+            ```bash
+            cyberguard --teaching
+            sudo cyberguard --require-admin --browser --shell
+            cyberguard --vt-key YOUR_KEY --json
+            ```
+
+  # ── Publish to PyPI (optional — set PYPI_TOKEN secret to enable) ────────────
+  publish-pypi:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Publish to PyPI
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build package
+        run: |
+          pip install build
+          python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_TOKEN }}
+          skip-existing: true
